@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var endGame = false;
+            $('td').click(function () {
+                if(endGame == true) {
+                    alert("Game is over!");
+                    return;
+                }
+                var myId = $(this).prop("id");
+                $.ajax({
+                    url: 'receive',
+                    type: 'post',
+                    dataType: 'html',
+                    data: {
+                        ajax_post_data: myId
+                    },
+                    success: function (data) {
+                        $('#result').html(data);
+                        var dataArray = new Array(...data);
+                        
+                        for (var i = 0; i < 9; i++) {
+                            $('#' + i).html(dataArray[i]);
+                            switch (dataArray[i]) 
+                            {
+                                case 'X':
+                                    $('#' + i).css('background', '#00C88C');
+                                    break;
+                                case 'O':
+                                    $('#' + i).css('background', '#0096C8');
+                                    break;                                   
+                                case ' ':          
+                                    $('#' + i).css('background', '#00C8C8');
+                                    break;
+                            }
+                        }
+                        
+                        if(dataArray.length != 9) {
+                            if(data.search("draw") != -1) {
+                                alert("A draw!");
+                            } else if(data.search("lose") != -1) {
+                                alert("You lose!");
+                            } else if(data.search("win") != -1) {
+                                alert("You win!");
+                            } else {
+                                alert("Game error!");
+                            }
+                            endGame = true;
+                        }
+                    }
+                });
+            });
+
+        });
+    </script>
+</head>
+<style>
+    .square {
+        width: 100px;
+        height: 100px;
+        background: rgb(0,200, 200);
+        text-align: center;
+        font-size: 50px;
+    }
+    
+    .v {
+        border-left: 1px solid #000;
+        border-right: 1px solid #000;
+    }
+    
+    .h {
+        border-top: 1px solid #000;
+        border-bottom: 1px solid #000;
+    }
+    
+    .board {
+        width: 300px;
+        margin: 0 auto;
+    }
+</style>
+
+<body>
+    <h1>Tic Tac Toe Game</h1>
+    <input type="button" value="New Game" onClick="window.location.reload()">
+    <hr>
+    <div class="board">
+        <table>
+            <tr id="row1">
+                <td class="square" id="0"></td>
+                <td class="square v" id="1"></td>
+                <td class="square" id="2"></td>
+            </tr>
+            <tr id="row2">
+                <td class="square h" id="3"></td>
+                <td class="square v h" id="4"></td>
+                <td class="square h" id="5"></td>
+            </tr>
+            <tr id="row3">
+                <td class="square" id="6"></td>
+                <td class="square v" id="7"></td>
+                <td class="square" id="8"></td>
+            </tr>
+        </table>
+    </div>
+    <hr>
+    Debug output: <div id="result"> result here </div>
+</body>
+
+</html>
