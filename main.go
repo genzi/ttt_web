@@ -44,11 +44,11 @@ func receiveAjax(w http.ResponseWriter, r *http.Request) {
 
 		if tttGame.HumanMove(move) == true {
 			tttGame.AiMove()
-			w.Write([]byte(ConvertBoardToString(tttGame.GetBoard())))
 		}
 
+		w.Write([]byte(ConvertBoardToString(tttGame.GetBoard())))
+
 		if isBoardFull() == true || tttGame.Win() != 0 {
-			w.Write([]byte(ConvertBoardToString(tttGame.GetBoard())))
 			switch tttGame.Win() {
 			case 0:
 				w.Write([]byte("draw"))
